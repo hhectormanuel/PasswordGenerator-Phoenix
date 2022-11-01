@@ -17,7 +17,18 @@ defmodule PasswordGeneratorWeb.PageController do
   end
 
   def generate(conn, %{"password"=> password_params}) do
+    password_lengths = [
+      Weak: Enum.map(6..15, & &1),
+      Strong: Enum.map(16..88, & &1),
+      Unbeliavable: [100, 150]
+    ]
 
+    {:ok, password} = PassGenerator.generate(password_params)
+
+    render(conn,
+    "index.html",
+    password_lengths: password_lengths,
+    password: password)
   end
 
 end
